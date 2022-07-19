@@ -4,21 +4,45 @@ const changePositionBtn = document.getElementById("changePositionBtn");
 
 const indicatorPositions = [2.15, 8.15, 14.15, 20.15, 26.15];
 
+let direction = "normal";
+
 let currentIndicatorPosition = 1;
 
-changePositionBtn.addEventListener("click", function () {
-    currentIndicatorPosition++;
+changePositionBtn.addEventListener("click", changeElement)
 
-    if (currentIndicatorPosition >= items.length) {
-        currentIndicatorPosition = 0;
-    }
+setInterval(changeElement, 1000);
 
-    indicator.style.left = `${indicatorPositions[currentIndicatorPosition]}rem`;
+function changeElement() {
+    if (direction === "normal") {
+        currentIndicatorPosition++;
 
-    for (let i = 0; i < items.length; i++) {
-        if (items[i].classList.contains("selected")) {
-            items[i].classList.remove("selected");
-            items[currentIndicatorPosition].classList.add("selected");
+        if (currentIndicatorPosition >= items.length) {
+            direction = "reverse";
+            currentIndicatorPosition--;
+        }
+
+        indicator.style.left = `${indicatorPositions[currentIndicatorPosition]}rem`;
+
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].classList.contains("selected")) {
+                items[i].classList.remove("selected");
+                items[currentIndicatorPosition].classList.add("selected");
+            }
         }
     }
-})
+
+    if (direction === "reverse") {
+        currentIndicatorPosition--;
+
+
+        if (currentIndicatorPosition === 0) {
+            direction = "normal";
+        }
+
+        indicator.style.left = `${indicatorPositions[currentIndicatorPosition]}rem`;
+
+        items[currentIndicatorPosition].classList.add("selected");
+        items[currentIndicatorPosition + 1].classList.remove("selected");
+    }
+    console.log(direction)
+}
